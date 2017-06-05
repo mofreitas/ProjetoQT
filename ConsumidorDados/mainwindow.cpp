@@ -98,7 +98,9 @@ void MainWindow::updateLista()
 
 void MainWindow::comecarPlotter()
 {
-    ui->plotterWidget->limparVetor();
+
+    timer->start(ui->timingSlider->value());
+    /*ui->plotterWidget->limparVetor();
     QList<QListWidgetItem*> itens_selecionados;
     QString comandoGet;
     if(socket->state()==QTcpSocket::ConnectedState)
@@ -136,10 +138,60 @@ void MainWindow::comecarPlotter()
     else
     {
         qDebug() << "Servidor desconectado, reconecte-o novamente";
+    }*/
+
+
+}
+
+void MainWindow::pararPlotter()
+{
+    timer->stop();
+    socket->readAll();
+    qDebug() << "Parando de obter dados do servidor";
+}
+
+void MainWindow::leituraDados()
+{
+    /*QString dado;
+    QStringList linha;
+    QDateTime dT;
+    if(socket->state()==QTcpSocket::ConnectedState)
+    {
+        //Perguntar ao professor (sempre necessário?)
+        if(socket->isOpen())
+        {
+            qDebug() << "Lendo Dados";
+            if(socket->bytesAvailarerble()) //Repete enquanto houver dados na lista de espera
+            {
+                //ler a linha mandada pelo servidor, retirando os "\n" e "\n" que vem com os dados
+                dado=socket->readLine().replace("\n", "").replace("\r", "");
+                //LEr documentação QString::split -> Separa string em " " e retorna uma QStringList com as substrings;
+                linha=dado.split(" ");
+                //Verifica se tem apenas dois dados (hora e valor)
+                if(linha.size()==2)
+                {
+
+                    dT = QDateTime::fromString(linha.at(0), Qt::ISODate);
+                    dado=linha.at(1);
+                    qDebug() << dT.toString(Qt::ISODate) << " " << QString::number(dado.toInt());
+
+                    ui->plotterWidget->setReta(dT, dado.toInt());
+                }
+            }
+            else
+            {
+                timer->stop();
+                qDebug() << "Leitura finalizada";
+            }
+        }
     }
+    else
+    {
+        qDebug() << "Servidor desconectado, reconecte-o novamente";
+    }*/
 
 
-    /*QList<QListWidgetItem*> itens_selecionados;
+    QList<QListWidgetItem*> itens_selecionados;
     QString comandoGet, dado;
     QStringList linha, dados;
     if(socket->state()==QTcpSocket::ConnectedState)
@@ -185,55 +237,6 @@ void MainWindow::comecarPlotter()
                 qDebug() << "Falha na leitura de dados";
             }
             ui->plotterWidget->converterDados(dados);
-            timer->start(ui->timingSlider->value());
-        }
-    }
-    else
-    {
-        qDebug() << "Servidor desconectado, reconecte-o novamente";
-    }*/
-}
-
-void MainWindow::pararPlotter()
-{
-    timer->stop();
-    socket->readAll();
-    qDebug() << "Parando de obter dados do servidor";
-}
-
-void MainWindow::leituraDados()
-{
-    QString dado;
-    QStringList linha;
-    QDateTime dT;
-    if(socket->state()==QTcpSocket::ConnectedState)
-    {
-        //Perguntar ao professor (sempre necessário?)
-        if(socket->isOpen())
-        {
-            qDebug() << "Lendo Dados";
-            if(socket->bytesAvailable()) //Repete enquanto houver dados na lista de espera
-            {
-                //ler a linha mandada pelo servidor, retirando os "\n" e "\n" que vem com os dados
-                dado=socket->readLine().replace("\n", "").replace("\r", "");
-                //LEr documentação QString::split -> Separa string em " " e retorna uma QStringList com as substrings;
-                linha=dado.split(" ");
-                //Verifica se tem apenas dois dados (hora e valor)
-                if(linha.size()==2)
-                {
-
-                    dT = QDateTime::fromString(linha.at(0), Qt::ISODate);
-                    dado=linha.at(1);
-                    qDebug() << dT.toString(Qt::ISODate) << " " << QString::number(dado.toInt());
-
-                    ui->plotterWidget->setReta(dT, dado.toInt());
-                }
-            }
-            else
-            {
-                timer->stop();
-                qDebug() << "Leitura finalizada";
-            }
         }
     }
     else

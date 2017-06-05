@@ -33,15 +33,8 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
 
     for(int i=0;i<z;i=i+2)
     {
-        qDebug() << QString::number(height()) << " " << QString::number(height()*(1-(dados[i+1]/100))) << " "
-               << QString::number(height()*(1-(dados[i+1]/100.0))) << " "
-                  << QString::number(dados[i+2]*width()/20) << " "
-                     << QString::number(height()*(1-(dados[i+3]/100)));
-
-        pintor.drawLine(dados[i]*width()/20,height()*(1-(dados[i+1]/100.0)), dados[i+2]*width()/20, height()*(1-(dados[i+3]/100.0)));
-
+        pintor.drawLine(2*dados[i]*width()/z, height()*(1-(dados[i+1]/100.0)), 2*dados[i+2]*width()/z, height()*(1-(dados[i+3]/100.0)));
     }
-
 }
 
 void widgetPlotter::setReta(QDateTime dT, int y0)
