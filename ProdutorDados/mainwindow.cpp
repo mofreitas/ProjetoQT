@@ -76,7 +76,7 @@ void MainWindow::enviarDados()
     if(socket->state()==QTcpSocket::ConnectedState&&max>0)
     {
         datahora=QDateTime::currentDateTime();
-        string_envio="set " + datahora.toString(Qt::ISODate) + " " + QString::number(qrand()%max+min) + "\n";
+        string_envio="set " + datahora.toString(Qt::ISODate) + " " + QString::number(qrand()%max+min) + "\n\r";
 
         qDebug() << string_envio;
         socket->write(string_envio.toStdString().c_str());
@@ -99,8 +99,7 @@ void MainWindow::comecarEnvio()
     max = ui->maxSlider->value()-min;
     if(max>0)
     {
-        ip_host = ui->ipEdit->text();
-        timer->start(ui->timingSlider->value());
+        timer->start(ui->timingSlider->value()*1000);
         qDebug() << "Iniciando envio";
     }
     else

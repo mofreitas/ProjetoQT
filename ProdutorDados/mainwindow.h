@@ -30,7 +30,6 @@ private:
     Ui::MainWindow *ui;
     QTcpSocket *socket;
     int min, max;
-    QString ip_host;
     QTimer *timer;
 };
 
