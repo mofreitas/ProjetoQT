@@ -4,7 +4,8 @@
 #include <QWidget>
 #include <vector>
 #include <QPaintEvent>
-#include <QDateTime>
+#include <QList>
+#include <QString>
 
 using namespace std;
 
@@ -14,15 +15,15 @@ class widgetPlotter : public QWidget
 public:
     explicit widgetPlotter(QWidget *parent = 0);
     void paintEvent(QPaintEvent *e);
-    //void converterDados(QStringList &lista_dados);
-    void setReta(QDateTime dT, int y0);
+    void desenharGrafico(QList<QString> &lista_dados);
     void limparVetor();
 
 signals:
 
 private:
-    vector<int> dados;
-    QDateTime horaInicial;
+    vector<qint64> eixoX;
+    vector<int> eixoY;
+    qint64 horaInicial;
 };
 
 #endif // WIDGETPLOTTER_H

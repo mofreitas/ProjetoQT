@@ -6,13 +6,13 @@
 #include <QDebug>
 #include <vector>
 #include <QString>
+#include <QDateTime>
 
 using namespace std;
 
 
 widgetPlotter::widgetPlotter(QWidget *parent) : QWidget(parent)
 {
-    dados.resize(0);
 }
 
 void widgetPlotter::paintEvent(QPaintEvent *e)
@@ -29,14 +29,33 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
     caneta.setColor(Qt::green);
     caneta.setWidth(2);
     pintor.setPen(caneta);
-    int z= dados.size()-2;
-
-    for(int i=0;i<z;i=i+2)
+    int z=eixoX.size()-1;
+    for(int i=0;i<z;i++)
     {
-        pintor.drawLine(2*dados[i]*width()/z, height()*(1-(dados[i+1]/100.0)), 2*dados[i+2]*width()/z, height()*(1-(dados[i+3]/100.0)));
+        qDebug() << QString::number(eixoX[i]*width()/30) << " "
+               << QString::number(height()*(1-(eixoY[i]/100.0))) << " "
+                 << QString::number(eixoX[i+1]*width()/30) << " "
+                   << QString::number(height()*(1-(eixoY[i+1]/100)));
+
+       pintor.drawLine(eixoX[i]*width()/(z-1),height()*(1-(eixoY[i]/100.0)), eixoX[i+1]*width()/(z-1), height()*(1-(eixoY[i+1]/100.0)));
+
     }
+
 }
 
+void widgetPlotter::desenharGrafico(QList<QString> &lista_dados)
+{
+    horaInicial=lista_dados.at(0).toLongLong();
+
+    for(int i=0;i<lista_dados.size();i=i+2)
+    {
+        eixoX.push_back((lista_dados.at(i).toLongLong()-horaInicial)/1000);
+        eixoY.push_back(lista_dados.at(i+1).toInt());
+    }
+    repaint();
+}
+
+/*
 void widgetPlotter::setReta(QDateTime dT, int y0)
 {
     if(dados.size()==0)
@@ -55,20 +74,12 @@ void widgetPlotter::setReta(QDateTime dT, int y0)
     {
         repaint();
     }
-}
+}*/
 
 void widgetPlotter::limparVetor()
 {
-    dados.clear();
+    eixoX.clear();
+    eixoY.clear();
 }
 
-
-/*
-void widgetPlotter::converterDados(QStringList &lista_dados)
-{
-    for(int i=0;i<lista_dados.size();i++)
-    {
-        dados.push_back(lista_dados.at(i).toInt());
-    }
-}*/
 
