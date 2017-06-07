@@ -82,7 +82,7 @@ void MainWindow::enviarDados()
         socket->write(string_envio.toStdString().c_str());
         if(socket->waitForBytesWritten(3000))
         {
-            ui->logBrowser->append(string_envio);
+            ui->logBrowser->append(string_envio.replace("\n", "").replace("\r", ""));
             qDebug() << "Dados enviados com sucesso";
         }
     }

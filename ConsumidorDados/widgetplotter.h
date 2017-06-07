@@ -16,7 +16,6 @@ public:
     explicit widgetPlotter(QWidget *parent = 0);
     void paintEvent(QPaintEvent *e);
     void desenharGrafico(QList<QString> &lista_dados);
-    void limparVetor();
 
 signals:
 
