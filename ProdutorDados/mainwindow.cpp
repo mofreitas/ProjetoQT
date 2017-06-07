@@ -4,7 +4,6 @@
 #include <QTcpSocket>
 #include <QDateTime>
 #include <QTimer>
-#include <QThread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -99,8 +98,7 @@ void MainWindow::comecarEnvio()
     max = ui->maxSlider->value()-min;
     if(max>0)
     {
-        ip_host = ui->ipEdit->text();
-        timer->start(ui->timingSlider->value());
+        timer->start(ui->timingSlider->value()*1000);
         qDebug() << "Iniciando envio";
     }
     else
