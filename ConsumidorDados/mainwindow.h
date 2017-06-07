@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QTcpSocket>
-#include <vector>
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -23,13 +23,12 @@ public slots:
     void updateLista();
     void comecarPlotter();
     void pararPlotter();
-
-private slots:
-    void on_atualizarButton_clicked();
+    void leituraDados();
 
 private:
     Ui::MainWindow *ui;
     QTcpSocket *socket;
+    QTimer *timer;
 };
 
 #endif // MAINWINDOW_H

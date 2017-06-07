@@ -4,6 +4,7 @@
 #include <QTcpSocket>
 #include <QDateTime>
 #include <QTimer>
+#include <QThread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -75,7 +76,7 @@ void MainWindow::enviarDados()
     if(socket->state()==QTcpSocket::ConnectedState&&max>0)
     {
         datahora=QDateTime::currentDateTime();
-        string_envio="set " + datahora.toString(Qt::ISODate) + " " + QString::number(qrand()%max+min) + "\n";
+        string_envio="set " + QString::number(datahora.currentMSecsSinceEpoch()) + " " + QString::number(qrand()%max+min) + "\n\r";
 
         qDebug() << string_envio;
         socket->write(string_envio.toStdString().c_str());
