@@ -1,8 +1,8 @@
 # ProjetoQT
 
 Coisas para fazer:
-<li>
-<ol>Testar programa e consertar bugs</ol>
-<ol>Montar layout consumidor</ol>
-<ol>Arrumar lista do produtor</ol>
-</li>
+<ol>
+<li>Testar programa e consertar bugs</li>
+<li>Montar layout consumidor</li>
+<li>Arrumar lista do produtor</li>
+</ol>
