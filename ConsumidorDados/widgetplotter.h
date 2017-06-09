@@ -23,6 +23,7 @@ private:
     vector<qint64> eixoX;
     vector<int> eixoY;
     qint64 horaInicial;
+    qint64 horaFinal;
 };
 
 #endif // WIDGETPLOTTER_H

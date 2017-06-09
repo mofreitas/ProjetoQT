@@ -13,13 +13,15 @@ using namespace std;
 
 widgetPlotter::widgetPlotter(QWidget *parent) : QWidget(parent)
 {
+    horaFinal=2;
+    horaInicial=1;
 }
 
 void widgetPlotter::paintEvent(QPaintEvent *e)
 {    
     QPainter pintor(this);
-    QBrush pincel(Qt::gray, Qt::SolidPattern);
-    QPen caneta(Qt::gray);
+    QBrush pincel(Qt::darkGray, Qt::SolidPattern);
+    QPen caneta(Qt::darkGray);
     pintor.setRenderHint(QPainter::Antialiasing);
 
     pintor.setPen(caneta);
@@ -30,16 +32,17 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
     caneta.setWidth(2);
     pintor.setPen(caneta);
     int z=eixoX.size()-1;
-    int k;
+    //relacionar com eixo.size() para adaptar a quantidade de dados na tela
+    int intervalo = 1000*width()/(horaFinal-horaInicial);
     for(int i=0;i<z;i++)
     {
-        k=i+1;
-        qDebug() << QString::number(eixoX[i]*width()/(z-1)) << " "
+        //k=i+1;
+        qDebug() << QString::number(eixoX[i]*intervalo) << " "
                << QString::number(height()*(1-(eixoY[i]/100.0))) << " "
-                 << QString::number(eixoX[k]*width()/(z-1)) << " "
-                   << QString::number(height()*(1-(eixoY[k]/100)));
+                 << QString::number(eixoX[i+1]*intervalo) << " ";
+                  // << QString::number(height()*k);
 
-       pintor.drawLine(eixoX[i]*width()/(z-1),height()*(1-(eixoY[i]/100.0)), eixoX[k]*width()/(z-1), height()*(1-(eixoY[k]/100.0)));
+       pintor.drawLine(eixoX[i]*intervalo,height()*(1-(eixoY[i]/100.0)), eixoX[i+1]*intervalo, height()*(1-(eixoY[i+1]/100.0)));
     }
 }
 
@@ -48,7 +51,13 @@ void widgetPlotter::desenharGrafico(QList<QString> &lista_dados)
     eixoX.clear();
     eixoY.clear();
 
+    //Tem que receber qint64 para funcionar. Não converte para long int
     horaInicial=lista_dados.at(0).toLongLong();
+    //Já que lista_dados armazena x e y, respectivamente, o ultimo x é o ultimo
+    //dado de lista_dados-1
+
+    horaFinal=lista_dados.at(lista_dados.size()-2).toLongLong();
+    qDebug() << QString::number(horaFinal) << QString::number(horaInicial);
 
     for(int i=0;i<lista_dados.size();i=i+2)
     {
