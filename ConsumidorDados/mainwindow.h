@@ -24,6 +24,7 @@ public slots:
     void comecarPlotter();
     void pararPlotter();
     void leituraDados();
+    void ativarBotoes();
 
 private:
     Ui::MainWindow *ui;

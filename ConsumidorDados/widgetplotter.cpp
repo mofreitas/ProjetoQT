@@ -7,6 +7,7 @@
 #include <vector>
 #include <QString>
 #include <QDateTime>
+#include <cmath>
 
 using namespace std;
 
@@ -34,17 +35,17 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
     int z=eixoX.size()-1;
     //relacionar com eixo.size() para adaptar a quantidade de dados na tela
     //caclcualrquantos dados precisam ser pegos calculando o tamanho e arredondando para cima
-    qDebug() << QString::number(width());
-    int intervalo = 1000.0*width()*29.0/(z*(horaFinal-horaInicial));
-
-    for(int i=0;i<z;i++)
+    //qDebug() << QString::number(width()) << QString::number(1000.0*width()*29.0/(z*(horaInicial-horaFinal)));
+    int intervalo = ceil(1000.0*width()*29.0/(z*(horaFinal-horaInicial)));
+    //qDebug() << QString::number(intervalo);
+    for(int i=z;i>0;i--)
     {
         qDebug() << QString::number(eixoX[i]*intervalo) << " "
                << QString::number(height()*(1-(eixoY[i]/100.0))) << " "
                  << QString::number(eixoX[i+1]*intervalo) << " ";
                   // << QString::number(height()*k);
 
-       pintor.drawLine(eixoX[i]*intervalo,height()*(1-(eixoY[i]/100.0)), eixoX[i+1]*intervalo, height()*(1-(eixoY[i+1]/100.0)));
+       pintor.drawLine(width()+eixoX[i-1]*intervalo,height()*(1-(eixoY[i-1]/100.0)), width()+eixoX[i]*intervalo, height()*(1-(eixoY[i]/100.0)));
     }
 }
 
@@ -58,11 +59,11 @@ void widgetPlotter::desenharGrafico(QList<QString> &lista_dados)
     //Já que lista_dados armazena x e y, respectivamente, o ultimo x é o ultimo
     //dado de lista_dados-1
     horaFinal=lista_dados.at(lista_dados.size()-2).toLongLong();
-    qDebug() << QString::number(horaFinal) << QString::number(horaInicial);
+    //qDebug() << QString::number(horaFinal) << QString::number(horaInicial);
 
     for(int i=0;i<lista_dados.size();i=i+2)
     {
-        eixoX.push_back((lista_dados.at(i).toLongLong()-horaInicial)/1000);
+        eixoX.push_back((lista_dados.at(i).toLongLong()-horaFinal)/1000);
         eixoY.push_back(lista_dados.at(i+1).toInt());
     }
     repaint();

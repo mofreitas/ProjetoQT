@@ -37,6 +37,10 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(clicked(bool)),
             this,
             SLOT(pararPlotter()));
+    connect(ui->listWidget,
+            SIGNAL(itemSelectionChanged()),
+            this,
+            SLOT(ativarBotoes()));
 
     //TEM QUE DAR "promote to" no botao direito do widget para relaciona-lo a uma classe
 }
@@ -89,6 +93,7 @@ void MainWindow::updateLista()
         else
         {
             qDebug() << "Falha ao listar dipositivos conectados";
+            ui->comecarButton->setEnabled(true);
         }
     }
     else
@@ -135,7 +140,7 @@ void MainWindow::leituraDados()
                 {
                     while(socket->bytesAvailable()) //Repete enquanto houver dados na lista de espera
                     {
-                        qDebug() << "Lendo linha";
+                        //qDebug() << "Lendo linha";
                         //ler a linha mandada pelo servidor, retirando os "\n" e "\n" que vem com os dados
                         dado=socket->readLine().replace("\n", "").replace("\r", "");
                         //LEr documentação QString::split -> Separa string em " " e retorna uma QStringList com as substrings;
@@ -167,6 +172,12 @@ void MainWindow::leituraDados()
     else
     {
         qDebug() << "Servidor desconectado, reconecte-o novamente";
-    }    
+    }
+}
+
+void MainWindow::ativarBotoes()
+{
+        ui->comecarButton->setEnabled(true);
+        ui->pararButton->setEnabled(true);
 }
 

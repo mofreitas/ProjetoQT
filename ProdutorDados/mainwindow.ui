@@ -225,12 +225,12 @@
    <slot>display(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>153</y>
+     <x>110</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
-     <x>221</x>
-     <y>184</y>
+     <x>246</x>
+     <y>138</y>
     </hint>
    </hints>
   </connection>
@@ -241,28 +241,28 @@
    <slot>display(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>213</y>
+     <x>110</x>
+     <y>183</y>
     </hint>
     <hint type="destinationlabel">
-     <x>221</x>
-     <y>244</y>
+     <x>246</x>
+     <y>207</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>timingSlider</sender>
-   <signal>sliderMoved(int)</signal>
+   <signal>valueChanged(int)</signal>
    <receiver>timingLabel</receiver>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>109</x>
-     <y>313</y>
+     <x>128</x>
+     <y>252</y>
     </hint>
     <hint type="destinationlabel">
-     <x>223</x>
-     <y>299</y>
+     <x>244</x>
+     <y>263</y>
     </hint>
    </hints>
   </connection>
