@@ -42,10 +42,12 @@ void MainWindow::conectarHost()
     if(socket->waitForConnected(3000))
     {
         qDebug() << "Conectado com sucesso";
+        ui->logBrowser->append("Conectado com sucesso");
     }
     else
     {
         qDebug() << "Falha na conexão";
+        ui->logBrowser->append("Falha na conexão");
     }
 }
 
@@ -53,6 +55,7 @@ void MainWindow::desconectarHost()
 {
     socket->disconnectFromHost();
     qDebug() << "Desconectando...";
+    ui->logBrowser->append("Desconectando...");
 }
 
 MainWindow::~MainWindow()
@@ -66,6 +69,7 @@ void MainWindow::pararEnvio()
 {
     timer->stop();
     qDebug() << "Envio terminado com sucesso";
+    ui->logBrowser->append("Envio terminado com sucesso");
 }
 
 void MainWindow::enviarDados()
@@ -84,11 +88,13 @@ void MainWindow::enviarDados()
         {
             ui->logBrowser->append(string_envio.replace("\n", "").replace("\r", ""));
             qDebug() << "Dados enviados com sucesso";
+            ui->logBrowser->append("Dados enviados com sucesso");
         }
     }
     else
     {
         qDebug() << "Falha no envio de dados";
+        ui->logBrowser->append("Falha no envio de dados");
     }
 }
 
@@ -101,10 +107,11 @@ void MainWindow::comecarEnvio()
     {
         timer->start(ui->timingSlider->value()*1000);
         qDebug() << "Iniciando envio";
+        ui->logBrowser->append("Iniciando envio");
     }
     else
     {
         qDebug() << "Erro na definição de Min e Max";
+        ui->logBrowser->append("Erro na definição de Min e Max");
     }
 }
-
