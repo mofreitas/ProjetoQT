@@ -4,7 +4,6 @@
 #include <QTcpSocket>
 #include <QDateTime>
 #include <QTimer>
-#include <QThread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -88,7 +87,6 @@ void MainWindow::enviarDados()
         {
             ui->logBrowser->append(string_envio.replace("\n", "").replace("\r", ""));
             qDebug() << "Dados enviados com sucesso";
-            ui->logBrowser->append("Dados enviados com sucesso");
         }
     }
     else
