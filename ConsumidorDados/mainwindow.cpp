@@ -4,6 +4,10 @@
 #include <QTcpSocket>
 #include <QDebug>
 #include <QDateTime>
+#include <QString>
+#include <QList>
+#include <QStringList>
+#include <QListWidgetItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -116,7 +120,6 @@ void MainWindow::pararPlotter()
 
 void MainWindow::leituraDados()
 {
-
     QList<QListWidgetItem*> itens_selecionados;
     QString comandoGet, dado;
     QStringList linha;
