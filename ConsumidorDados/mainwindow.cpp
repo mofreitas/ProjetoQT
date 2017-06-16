@@ -8,6 +8,7 @@
 #include <QList>
 #include <QStringList>
 #include <QListWidgetItem>
+#include <vector>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -120,6 +121,7 @@ void MainWindow::pararPlotter()
 
 void MainWindow::leituraDados()
 {
+    vector<float> eixoX, eixoY;
     QList<QListWidgetItem*> itens_selecionados;
     QString comandoGet, dado;
     QStringList linha;
@@ -156,7 +158,20 @@ void MainWindow::leituraDados()
                             dados.append(linha.at(1));
                         }
                     }
-                    ui->plotterWidget->desenharGrafico(dados);
+
+                    float hI=dados.at(0).toFloat();
+                    for(int i=0;i<dados.size();i=i+2)
+                    {
+                        eixoX.push_back((dados.at(i).toFloat()-hI)/1000);
+                        eixoY.push_back(dados.at(i+1).toInt());
+                    }
+
+                    for(int i=eixoX.size(); i<30;i++)
+                    {
+                        eixoX.push_back(eixoX.back()+1);
+                        eixoY.push_back(0);
+                    }
+                    ui->plotterWidget->desenharGrafico(eixoX, eixoY);
                 }
                 else
                 {

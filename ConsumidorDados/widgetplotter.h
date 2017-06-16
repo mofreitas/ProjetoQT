@@ -15,15 +15,15 @@ class widgetPlotter : public QWidget
 public:
     explicit widgetPlotter(QWidget *parent = 0);
     void paintEvent(QPaintEvent *e);
-    void desenharGrafico(QList<QString> &lista_dados);
+    void desenharGrafico(const vector<float> &eX, const vector<float> &eY);
 
 signals:
 
 private:
-    vector<qint64> eixoX;
-    vector<int> eixoY;
-    qint64 horaInicial;
-    qint64 horaFinal;
+    vector<float> eixoX;
+    vector<float> eixoY;
+    float horaInicial;
+    float horaFinal;
 };
 
 #endif // WIDGETPLOTTER_H
