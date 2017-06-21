@@ -15,7 +15,7 @@ class widgetPlotter : public QWidget
 public:
     explicit widgetPlotter(QWidget *parent = 0);
     void paintEvent(QPaintEvent *e);
-    void desenharGrafico(const vector<float> &eX, const vector<float> &eY);
+    void desenharGrafico(vector<float> &eX, vector<float> &eY);
 
 signals:
 
