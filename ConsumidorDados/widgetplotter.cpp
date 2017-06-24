@@ -35,20 +35,16 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
     pintor.setPen(caneta);
     //numero de dados
     int z=eixoX.size()-1;
-    //relacionar com eixo.size() para adaptar a quantidade de dados na tela
-    //caclcualrquantos dados precisam ser pegos calculando o tamanho e arredondando para cima
-    //qDebug() << QString::number(width()) << QString::number(1000.0*width()*29.0/(z*(horaInicial-horaFinal)));
-    //int intervalo = round(1000.0*width()/(horaFinal-horaInicial));
-    //qDebug() << eixoX[1];
+
     for(int i=0;i<(z-1);i++)
     {
       /* qDebug() << QString::number(/*eixoX[i]*intervalo/width()-eixoX[i]) << " "
                << QString::number(height()*(1-(eixoY[i]/100.0))) << " "
                  << QString::number(width()-eixoX[i+1]) << " ";// << QString::number(intervalo);
                    << QString::number(height()*k);*/
+        qDebug() << eixoX[i] << eixoX[i+1];
 
-
-       pintor.drawLine(eixoX[i+1]*width(),height()*(1-(eixoY[i+1]/100.0)), eixoX[i]*width(), height()*(1-(eixoY[i]/100.0)));
+       pintor.drawLine(round(eixoX[i]*width()),height()*(1-(eixoY[i]/100.0)), round(eixoX[i+1]*width()), height()*(1-(eixoY[i+1]/100.0)));
     }    
 }
 
@@ -63,12 +59,11 @@ void widgetPlotter::desenharGrafico(vector<float> &eX, vector<float> &eY)
     //Já que lista_dados armazena x e y, respectivamente, o ultimo x é o ultimo
     //dado de lista_dados-1
     horaFinal=eX[29];
-    //qDebug() << QString::number(horaFinal) << QString::number(horaInicial);
-
     float intervalo=horaFinal-horaInicial;
+    qDebug() << intervalo;
     for(unsigned int i =0;i<eX.size();i++)
     {
-        eixoX.push_back((eX[i]-horaInicial)/intervalo);
+        eixoX.push_back(eX[i]/intervalo);
     }
     repaint();
 }

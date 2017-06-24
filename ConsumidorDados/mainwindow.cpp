@@ -159,11 +159,12 @@ void MainWindow::leituraDados()
                         }
                     }
 
-                    float hI=dados.at(0).toFloat();
+                    long int hI=dados[0].toLong();
                     for(int i=0;i<dados.size();i=i+2)
                     {
-                        eixoX.push_back((dados.at(i).toFloat()-hI)/1000);
-                        eixoY.push_back(dados.at(i+1).toInt());
+                        //sem o (float), a operação pode descosiderar os flutuantes
+                        eixoX.push_back((float)(dados[i].toLong()-hI)/1000);
+                        eixoY.push_back(dados[i+1].toInt());
                     }
 
                     for(int i=eixoX.size(); i<30;i++)
@@ -171,7 +172,7 @@ void MainWindow::leituraDados()
                         eixoX.push_back(eixoX.back()+1);
                         eixoY.push_back(0);
                     }
-                    ui->plotterWidget->desenharGrafico(eixoX, eixoY);
+                   ui->plotterWidget->desenharGrafico(eixoX, eixoY);
                 }
                 else
                 {
