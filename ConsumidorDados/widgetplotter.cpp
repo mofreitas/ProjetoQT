@@ -36,7 +36,7 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
     //numero de dados
     int z=eixoX.size()-1;
 
-    for(int i=0;i<(z-1);i++)
+    for(int i=0;i<(z);i++)
     {
       /* qDebug() << QString::number(/*eixoX[i]*intervalo/width()-eixoX[i]) << " "
                << QString::number(height()*(1-(eixoY[i]/100.0))) << " "
@@ -59,12 +59,14 @@ void widgetPlotter::desenharGrafico(vector<float> &eX, vector<float> &eY)
     //Já que lista_dados armazena x e y, respectivamente, o ultimo x é o ultimo
     //dado de lista_dados-1
     horaFinal=eX[29];
+    qDebug() << eX[29] << eY[29];
     float intervalo=horaFinal-horaInicial;
     qDebug() << intervalo;
     for(unsigned int i =0;i<eX.size();i++)
     {
         eixoX.push_back(eX[i]/intervalo);
     }
+    qDebug() << "eixos" << eixoX[29] << eixoY[29];
     repaint();
 }
 

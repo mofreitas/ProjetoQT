@@ -158,17 +158,19 @@ void MainWindow::leituraDados()
                             dados.append(linha.at(1));
                         }
                     }
-
-                    long int hI=dados[0].toLong();
+                    bool ok;
+                    double hI=dados[0].toDouble(&ok);
+                    qDebug() << " hI"  << hI  << "ok" << ok << dados[0];
                     for(int i=0;i<dados.size();i=i+2)
                     {
                         //sem o (float), a operação pode descosiderar os flutuantes
-                        eixoX.push_back((float)(dados[i].toLong()-hI)/1000);
+                        eixoX.push_back((float)(dados[i].toDouble()-hI)/1000);
                         eixoY.push_back(dados[i+1].toInt());
                     }
 
                     for(int i=eixoX.size(); i<30;i++)
                     {
+                        qDebug() << "entrou";
                         eixoX.push_back(eixoX.back()+1);
                         eixoY.push_back(0);
                     }
