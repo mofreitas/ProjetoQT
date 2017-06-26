@@ -42,10 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
             SIGNAL(clicked(bool)),
             this,
             SLOT(pararPlotter()));
-    connect(ui->listWidget,
-            SIGNAL(itemSelectionChanged()),
-            this,
-            SLOT(ativarBotoes()));
 
     //TEM QUE DAR "promote to" no botao direito do widget para relaciona-lo a uma classe
 }
@@ -53,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete socket;
+    delete timer;
     delete ui;
 }
 
@@ -115,6 +112,7 @@ void MainWindow::comecarPlotter()
 void MainWindow::pararPlotter()
 {
     timer->stop();
+    //limpa buffer de entrada
     socket->readAll();
     qDebug() << "Parando de obter dados do servidor";
 }
@@ -132,62 +130,66 @@ void MainWindow::leituraDados()
         {
             //Obtem lista de objetos selecionados
             itens_selecionados=ui->listWidget->selectedItems();
-            //Monta o comando "get"
-            comandoGet="get " + itens_selecionados.at(0)->text() + " 30";
-            //Envia o comando, lembrando que write recebe ponteiro para std::string
-            socket->write(comandoGet.toStdString().c_str());
-            //Espera 3s para enviar comando
-            if(socket->waitForBytesWritten(3000))
+            //Verifica se tem itens selecionados
+            if(itens_selecionados.length()!=0)
             {
-                qDebug() << "Dados requeridos com sucesso";
-                //Espera 3s para leitura de dados
-                if(socket->waitForReadyRead(3000))
+                //Monta o comando "get"
+                comandoGet="get " + itens_selecionados.at(0)->text() + " 30";
+                //Envia o comando, lembrando que write recebe ponteiro para std::string
+                socket->write(comandoGet.toStdString().c_str());
+                //Espera 3s para enviar comando
+                if(socket->waitForBytesWritten(3000))
                 {
-                    while(socket->bytesAvailable()) //Repete enquanto houver dados na lista de espera
+                    qDebug() << "Dados requeridos com sucesso";
+                    //Espera 3s para leitura de dados
+                    if(socket->waitForReadyRead(3000))
                     {
-                        //qDebug() << "Lendo linha";
-                        //ler a linha mandada pelo servidor, retirando os "\n" e "\n" que vem com os dados
-                        dado=socket->readLine().replace("\n", "").replace("\r", "");
-                        //LEr documentação QString::split -> Separa string em " " e retorna uma QStringList com as substrings;
-                        linha=dado.split(" ");
-                        //Verifica se tem apenas dois dados (hora e valor)
-                        if(linha.size()==2)
+                        while(socket->bytesAvailable()) //Repete enquanto houver dados na lista de espera
                         {
-                            dados.append(linha.at(0));
-                            //Pega o segundo valor de dados
-                            dados.append(linha.at(1));
+                            //qDebug() << "Lendo linha";
+                            //ler a linha mandada pelo servidor, retirando os "\n" e "\n" que vem com os dados
+                            dado=socket->readLine().replace("\n", "").replace("\r", "");
+                            //Ler documentação QString::split -> Separa string em " " e retorna uma QStringList com as substrings;
+                            linha=dado.split(" ");
+                            //Verifica se tem apenas dois dados (hora e valor)
+                            if(linha.size()==2)
+                            {
+                                dados.append(linha.at(0));
+                                dados.append(linha.at(1));
+                            }
                         }
-                    }
-                    bool ok;
-                    double hI=dados[0].toDouble(&ok);
-                    qDebug() << " hI"  << hI  << "ok" << ok << dados[0];
-                    for(int i=0;i<dados.size();i=i+2)
-                    {
-                        //sem o (float), a operação pode descosiderar os flutuantes
-                        eixoX.push_back((float)(dados[i].toDouble()-hI)/1000);
-                        eixoY.push_back(dados[i+1].toInt());
-                    }
 
-                    for(int i=eixoX.size(); i<30;i++)
-                    {
-                        qDebug() << "entrou";
-                        eixoX.push_back(eixoX.back()+1);
-                        eixoY.push_back(0);
+                        //horaInicial do intervalo é a hora do primeiro dado
+                        double horaInicial=dados[0].toDouble();
+                        for(int i=0;i<dados.size();i=i+2)
+                        {
+                            //A operação abaixo faz a diferença entre a hora do dado e a hora inicial e transforma em segundos
+                            //Sem o (double), a operação abaixo pode retornar um inteiro
+                            eixoX.push_back((double)(dados[i].toDouble()-horaInicial)/1000);
+                            eixoY.push_back(dados[i+1].toInt());
+                        }
+
+                        //Preenche com ZEROS os espaços não preenchidos dos vetores
+                        for(int i=eixoX.size(); i<30;i++)
+                        {
+                            eixoX.push_back(eixoX.back()+1);
+                            eixoY.push_back(0);
+                        }
+                        ui->plotterWidget->desenharGrafico(eixoX, eixoY);
                     }
-                   ui->plotterWidget->desenharGrafico(eixoX, eixoY);
+                    else
+                    {
+                        qDebug() << "Falha na leitura de dados";
+                        timer->stop();
+                    }
                 }
                 else
                 {
-                    qDebug() << "Falha na leitura de dados";
+                    qDebug() << "Falha na requisição de dados";
                     timer->stop();
                 }
-            }
-            else
-            {
-                qDebug() << "Falha na requisição de dados";
-                timer->stop();
-            }
 
+            }
         }
     }
     else
@@ -195,10 +197,3 @@ void MainWindow::leituraDados()
         qDebug() << "Servidor desconectado, reconecte-o novamente";
     }
 }
-
-void MainWindow::ativarBotoes()
-{
-        ui->comecarButton->setEnabled(true);
-        ui->pararButton->setEnabled(true);
-}
-

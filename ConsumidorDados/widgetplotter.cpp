@@ -6,7 +6,6 @@
 #include <QDebug>
 #include <vector>
 #include <QString>
-#include <QDateTime>
 #include <cmath>
 
 using namespace std;
@@ -14,13 +13,11 @@ using namespace std;
 
 widgetPlotter::widgetPlotter(QWidget *parent) : QWidget(parent)
 {
-
-    horaFinal=2;
-    horaInicial=1;
 }
 
 void widgetPlotter::paintEvent(QPaintEvent *e)
 {    
+    //Declaração das variaveis necessárias para desenhar o plotter
     QPainter pintor(this);
     QBrush pincel(Qt::darkGray, Qt::SolidPattern);
     QPen caneta(Qt::darkGray);
@@ -33,40 +30,32 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
     caneta.setColor(Qt::green);
     caneta.setWidth(2);
     pintor.setPen(caneta);
-    //numero de dados
-    int z=eixoX.size()-1;
 
-    for(int i=0;i<(z);i++)
+
+    int n_dados=eixoX.size()-1;
+    for(int i=0;i<n_dados;i++)
     {
-      /* qDebug() << QString::number(/*eixoX[i]*intervalo/width()-eixoX[i]) << " "
-               << QString::number(height()*(1-(eixoY[i]/100.0))) << " "
-                 << QString::number(width()-eixoX[i+1]) << " ";// << QString::number(intervalo);
-                   << QString::number(height()*k);*/
-        qDebug() << eixoX[i] << eixoX[i+1];
-
-       pintor.drawLine(round(eixoX[i]*width()),height()*(1-(eixoY[i]/100.0)), round(eixoX[i+1]*width()), height()*(1-(eixoY[i+1]/100.0)));
+       pintor.drawLine(eixoX[i],height()*(1-(eixoY[i]/100.0)), eixoX[i+1], height()*(1-(eixoY[i+1]/100.0)));
     }    
 }
 
-void widgetPlotter::desenharGrafico(vector<float> &eX, vector<float> &eY)
+void widgetPlotter::desenharGrafico(const vector<float> &eX, const vector<float> &eY)
 {
+    //limpa os vetores
     eixoX.clear();
     eixoY.clear();
 
     eixoY=eY;
-    //Tem que receber qint64 para funcionar. Não converte para long int
-    horaInicial=eX[0];
-    //Já que lista_dados armazena x e y, respectivamente, o ultimo x é o ultimo
-    //dado de lista_dados-1
-    horaFinal=eX[29];
-    qDebug() << eX[29] << eY[29];
-    float intervalo=horaFinal-horaInicial;
-    qDebug() << intervalo;
-    for(unsigned int i =0;i<eX.size();i++)
+
+    //Intervalo é a diferença entre as horas que indicam o fim e inicio da emissão de dados
+    float intervalo=eX[29]-eX[0];
+
+    for(int i =0;i<eX.size();i++)
     {
-        eixoX.push_back(eX[i]/intervalo);
+        //Divide os dados igualmente entre o espaço disponibilizado pelo plotter
+        eixoX.push_back(round(eX[i]*width()/intervalo));
     }
-    qDebug() << "eixos" << eixoX[29] << eixoY[29];
+
     repaint();
 }
 

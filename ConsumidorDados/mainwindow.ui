@@ -29,7 +29,7 @@
         <item>
          <widget class="QLineEdit" name="ipLineEdit">
           <property name="text">
-           <string>127.0.0.1</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -111,7 +111,7 @@
           <item>
            <widget class="QPushButton" name="comecarButton">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Começar</string>
@@ -121,7 +121,7 @@
           <item>
            <widget class="QPushButton" name="pararButton">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Parar</string>
