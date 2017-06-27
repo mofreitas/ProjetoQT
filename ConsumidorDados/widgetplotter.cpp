@@ -31,12 +31,16 @@ void widgetPlotter::paintEvent(QPaintEvent *e)
     caneta.setWidth(2);
     pintor.setPen(caneta);
 
+    //O grafico foi preenchindo         tempoTotal --- width()
+    //usando a regra de 3:              tempoDado  ---   X     -->  X = tempoDado*width()/tempoTotal
+    //                                                         -->  X = (tempoDado/tempoTotal)*width()
+    //                                                         -->  X = eixoX[i]*width()
 
     int n_dados=eixoX.size()-1;
     for(int i=0;i<n_dados;i++)
     {
-       pintor.drawLine(eixoX[i],height()*(1-(eixoY[i]/100.0)), eixoX[i+1], height()*(1-(eixoY[i+1]/100.0)));
-    }    
+        pintor.drawLine(round(eixoX[i]*width()),height()*(1-(eixoY[i]/100.0)), round(eixoX[i+1]*width()), height()*(1-(eixoY[i+1]/100.0)));
+    }
 }
 
 void widgetPlotter::desenharGrafico(const vector<float> &eX, const vector<float> &eY)
@@ -52,13 +56,8 @@ void widgetPlotter::desenharGrafico(const vector<float> &eX, const vector<float>
 
     for(int i =0;i<eX.size();i++)
     {
-        //Divide os dados igualmente entre o espaço disponibilizado pelo plotter
-        eixoX.push_back(round(eX[i]*width()/intervalo));
+        //Normaliza cada valor em relação ao tempo total ()
+        eixoX.push_back(eX[i]/intervalo);
     }
-
     repaint();
 }
-
-
-
-

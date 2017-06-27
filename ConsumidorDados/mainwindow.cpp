@@ -164,12 +164,12 @@ void MainWindow::leituraDados()
                         for(int i=0;i<dados.size();i=i+2)
                         {
                             //A operação abaixo faz a diferença entre a hora do dado e a hora inicial e transforma em segundos
-                            //Sem o (double), a operação abaixo pode retornar um inteiro
+                            //Sem o (double), a operação abaixo pode retornar um inteiro, ocorrendo pera de dados
                             eixoX.push_back((double)(dados[i].toDouble()-horaInicial)/1000);
                             eixoY.push_back(dados[i+1].toInt());
                         }
 
-                        //Preenche com ZEROS os espaços não preenchidos dos vetores
+                        //Preenche com ZEROS os espaços não preenchidos dos vetores, somando 1s ao eixoX a cada iteraçao
                         for(int i=eixoX.size(); i<30;i++)
                         {
                             eixoX.push_back(eixoX.back()+1);
