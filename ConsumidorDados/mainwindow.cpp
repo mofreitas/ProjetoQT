@@ -59,7 +59,6 @@ void MainWindow::conectarHost()
     if(socket->waitForConnected(3000))
     {
         qDebug() << "Conectado com sucesso";
-        updateLista();
     }
     else
     {
@@ -100,6 +99,7 @@ void MainWindow::updateLista()
     }
     else
     {
+        ui->listWidget->clear();
         qDebug() << "Falha na conexão";
     }
 }
@@ -190,10 +190,16 @@ void MainWindow::leituraDados()
                 }
 
             }
+            else
+            {
+                qDebug() << "Nenhum produtor selecionado";
+                timer->stop();
+            }
         }
     }
     else
     {
         qDebug() << "Servidor desconectado, reconecte-o novamente";
+        timer->stop();
     }
 }
